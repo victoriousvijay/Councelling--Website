@@ -155,6 +155,12 @@
     right: 0;
   }
 
+  .nav-cta-mobile {
+    display: block !important;
+    width: 100%;
+    margin-top: 12px;
+  }
+
   .nav-cta {
     display: none; /* Hide top CTA on mobile */
   }

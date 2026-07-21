@@ -396,6 +396,10 @@ body.home-page .navbar:not(.scrolled) .nav-toggle span {
   gap: 16px;
 }
 
+.nav-cta-mobile {
+  display: none !important;
+}
+
 /* Mobile Hamburger Menu */
 .nav-toggle {
   display: none;
