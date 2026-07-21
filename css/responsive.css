@@ -1,0 +1,357 @@
+/* 
+ * Professional Female Counsellor Website Responsive Styles
+ * Counselor: Mrs. Preeti Pareek
+ * Technology: Pure CSS3
+ */
+
+/* -------------------------------------------------------------------------- */
+/* Large Screen & Small Desktops (max-width: 1200px)                           */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Tablets & Small Laptops (max-width: 1024px)                                */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* Global */
+  .section-title {
+    font-size: 2rem;
+  }
+
+  /* Hero Section */
+  .hero {
+    padding: 40px 0 80px 0;
+  }
+  .hero::before {
+    display: none; /* Hide background split */
+  }
+  .hero .container {
+    grid-template-columns: 1fr;
+    gap: 56px;
+    text-align: center;
+  }
+  .hero-content {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+  .hero-indicators {
+    justify-content: center;
+  }
+  .hero-visual {
+    max-width: 460px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* About Section */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+  .about-visual {
+    max-width: 460px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Counselling Services */
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  /* Who Can Benefit */
+  .benefit-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  /* Timeline */
+  .timeline-line {
+    left: 12.5%;
+    width: 75%;
+  }
+
+  /* Pricing Section */
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .pricing-card.recommended {
+    grid-column: span 2;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Contact Section */
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  /* Footer Section */
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Standard Mobile Devices (max-width: 768px)                                 */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Navigation Menu */
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--white);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 100px 32px 40px 32px;
+    gap: 24px;
+    box-shadow: -4px 0 24px rgba(23, 50, 77, 0.15);
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 1005;
+  }
+
+  .nav-links .nav-link {
+    color: var(--dark-text) !important;
+    font-size: 1.1rem;
+    font-weight: 600;
+    width: 100%;
+    border-bottom: 1px solid var(--soft-border);
+    padding-bottom: 8px;
+    display: block;
+  }
+
+  .nav-links .nav-link:hover,
+  .nav-links .nav-link.active {
+    color: var(--professional-blue) !important;
+    border-bottom-color: var(--professional-blue);
+  }
+
+  .nav-links .nav-link::after {
+    display: none !important; /* Hide desktop underline slide indicator on mobile */
+  }
+
+  .nav-links.active {
+    right: 0;
+  }
+
+  .nav-cta {
+    display: none; /* Hide top CTA on mobile */
+  }
+
+  /* Toggle Animation */
+  .nav-toggle.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+    background-color: var(--professional-blue);
+  }
+  .nav-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--professional-blue);
+  }
+
+  /* Scroll Lock when Mobile Menu Open */
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  /* Hero adjustments */
+  .hero-title {
+    font-size: 2.25rem;
+  }
+  .hero-desc {
+    font-size: 1rem;
+  }
+
+  /* Counselling Services */
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Who Can Benefit */
+  .benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* How Counselling Works - VERTICAL Timeline on Mobile */
+  .timeline-line {
+    top: 0;
+    left: 24px;
+    width: 2px;
+    height: 85%;
+  }
+  .timeline-progress {
+    top: 0;
+    left: 24px;
+    width: 2px;
+    height: 0;
+  }
+  .timeline-steps {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    text-align: left;
+    padding-left: 12px;
+  }
+  .timeline-step {
+    display: flex;
+    gap: 20px;
+    text-align: left;
+    padding: 0;
+  }
+  .timeline-icon-wrapper {
+    margin: 0;
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    border-width: 2px;
+  }
+  .timeline-step-content {
+    flex-grow: 1;
+    padding-top: 8px;
+  }
+
+  /* Why Choose This Counsellor */
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  /* Pricing/Sessions */
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .pricing-card.recommended {
+    grid-column: span 1;
+  }
+
+  /* Booking Grid & Form */
+  .booking-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .booking-form {
+    grid-template-columns: 1fr;
+  }
+  .form-full-width, .booking-form-submit, .form-privacy-note {
+    grid-column: span 1;
+  }
+  .booking-card {
+    padding: 32px 20px;
+  }
+
+  /* Testimonials */
+  .testimonials-slider-container {
+    padding: 0;
+  }
+  .slider-btn {
+    display: none; /* Swipe & dots only on mobile */
+  }
+  .testimonial-text {
+    font-size: 1.15rem;
+  }
+
+  /* Sticky Actions on Mobile Bottom */
+  .floating-actions {
+    bottom: 80px; /* Shift up to not overlap bottom bar */
+    right: 20px;
+  }
+  .mobile-bottom-bar {
+    display: grid; /* Show on mobile */
+  }
+  body {
+    padding-bottom: 60px; /* Add spacer for bottom bar */
+  }
+
+  /* Footer Grid */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Extra Small Screens (max-width: 480px)                                     */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  /* Spacers */
+  .section-header {
+    margin-bottom: 36px;
+  }
+  .about, .services-section, .benefit-section, .works-section, .why-section, .pricing-section, .testimonials-section, .faqs-section, .booking-section, .contact-section {
+    padding: 60px 0;
+  }
+
+  /* Hero elements scale */
+  .hero-title {
+    font-size: 1.85rem;
+  }
+  .hero-tag {
+    font-size: 0.75rem;
+  }
+  .hero-actions .btn {
+    width: 100%;
+  }
+  .hero-indicators {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  /* Availability cards overlay tweak */
+  .availability-card {
+    left: -5px;
+    top: 15px;
+    padding: 8px 12px;
+  }
+  .confidential-card {
+    right: -5px;
+    bottom: 25px;
+    padding: 8px 12px;
+  }
+
+  /* Qualifications grid stack */
+  .qualifications-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stat details stack */
+  .about-stats {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* Contact and Footer */
+  .contact-info-card, .contact-form-card {
+    padding: 24px 16px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-bottom-links {
+    justify-content: center;
+  }
+}
