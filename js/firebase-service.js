@@ -4,6 +4,7 @@
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { 
   getFirestore, 
   collection, 
@@ -31,30 +32,74 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firestore using the designated databaseId
 const db = getFirestore(app, "ai-studio-mrspreetipareekp-6c2c037a-2d45-41b0-b3fc-b42bf8838e3b");
 
+// Initialize Auth to gather contextual user security data
+const auth = getAuth(app);
+
+const OperationType = {
+  CREATE: 'create',
+  UPDATE: 'update',
+  DELETE: 'delete',
+  LIST: 'list',
+  GET: 'get',
+  WRITE: 'write',
+};
+
+/**
+ * Custom error handler for Firestore operations that yields structured JSON.
+ */
+function handleFirestoreError(error, operationType, path) {
+  const errInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    operationType,
+    path,
+    authInfo: {
+      userId: auth.currentUser?.uid || null,
+      email: auth.currentUser?.email || null,
+      emailVerified: auth.currentUser?.emailVerified || null,
+      isAnonymous: auth.currentUser?.isAnonymous || null,
+      tenantId: auth.currentUser?.tenantId || null,
+      providerInfo: auth.currentUser?.providerData?.map(provider => ({
+        providerId: provider.providerId,
+        email: provider.email,
+      })) || []
+    }
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
+}
+
 /**
  * Save a new booking or enquiry lead to Firestore
  * @param {string} type - 'booking' or 'enquiry'
  * @param {Object} data - Lead details
  */
 export async function saveLead(type, data) {
+  const leadsCollection = collection(db, "leads");
+  const leadData = {
+    type: type,
+    status: "New", // Default status
+    ...data,
+    timestamp: data.timestamp || new Date().toISOString()
+  };
+
   try {
-    const leadsCollection = collection(db, "leads");
-    const leadData = {
-      type: type,
-      status: "New", // Default status
-      ...data,
-      timestamp: data.timestamp || new Date().toISOString()
-    };
     const docRef = await addDoc(leadsCollection, leadData);
     console.log("Lead successfully stored with ID: ", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Error storing lead in Firestore: ", error);
-    // Fallback to local storage if firestore write fails
-    const localLeads = JSON.parse(localStorage.getItem("leads_fallback") || "[]");
-    localLeads.push({ type, status: "New", ...data });
-    localStorage.setItem("leads_fallback", JSON.stringify(localLeads));
-    return null;
+    
+    // Fallback to local storage if firestore write fails (as a backup)
+    try {
+      const localLeads = JSON.parse(localStorage.getItem("leads_fallback") || "[]");
+      localLeads.push({ type, status: "New", ...data });
+      localStorage.setItem("leads_fallback", JSON.stringify(localLeads));
+    } catch (fallbackError) {
+      console.error("Local storage fallback failed:", fallbackError);
+    }
+
+    // Call the required central error handler to bubble structural debugging context
+    handleFirestoreError(error, OperationType.CREATE, "leads");
   }
 }
 
@@ -76,7 +121,7 @@ export async function fetchLeads() {
     return leads;
   } catch (error) {
     console.error("Error fetching leads from Firestore: ", error);
-    return [];
+    handleFirestoreError(error, OperationType.LIST, "leads");
   }
 }
 
@@ -93,7 +138,7 @@ export async function updateLeadStatus(leadId, newStatus) {
     return true;
   } catch (error) {
     console.error("Error updating lead status: ", error);
-    return false;
+    handleFirestoreError(error, OperationType.UPDATE, `leads/${leadId}`);
   }
 }
 
@@ -109,6 +154,7 @@ export async function deleteLead(leadId) {
     return true;
   } catch (error) {
     console.error("Error deleting lead: ", error);
-    return false;
+    handleFirestoreError(error, OperationType.DELETE, `leads/${leadId}`);
   }
 }
+

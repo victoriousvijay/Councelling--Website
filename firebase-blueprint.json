@@ -1,0 +1,73 @@
+{
+  "entities": {
+    "lead": {
+      "title": "Lead",
+      "description": "Counselling booking or contact enquiry submission",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["booking", "enquiry"],
+          "description": "The type of lead, either booking or enquiry"
+        },
+        "fullName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Full name of the client"
+        },
+        "ageGroup": {
+          "type": "string",
+          "description": "Age group of the client"
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 20,
+          "description": "Phone number"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Email address"
+        },
+        "preferredService": {
+          "type": "string",
+          "description": "Preferred counselling service"
+        },
+        "preferredSessionMode": {
+          "type": "string",
+          "description": "Preferred session mode (e.g., video, phone, in-person)"
+        },
+        "preferredDate": {
+          "type": "string",
+          "description": "Preferred appointment date"
+        },
+        "preferredTime": {
+          "type": "string",
+          "description": "Preferred appointment time"
+        },
+        "mainConcern": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Primary concern or message"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["New", "Contacted", "Scheduled", "Archived"],
+          "description": "Workflow status of the lead"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of submission"
+        }
+      },
+      "required": ["type", "fullName", "email", "status"]
+    }
+  },
+  "firestore": {
+    "leads/{leadId}": {
+      "schema": "lead",
+      "description": "Collection of all counselling leads and enquiries"
+    }
+  }
+}

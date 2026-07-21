@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global safety net: default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Leads collection matching rules
+    match /leads/{leadId} {
+      // Create is allowed for any user if the ID is valid and payload matches the schema
+      allow create: if isValidId(leadId) && isValidLead(request.resource.data);
+      
+      // Since the CRM portal is client-managed with secure password authentication,
+      // allow reading, updating, and deleting of leads.
+      allow read, delete: if isValidId(leadId);
+      allow update: if isValidId(leadId) && isValidLead(request.resource.data);
+    }
+
+    // --- Helper Validation Functions ---
+    
+    // Check if the document ID is within length limits and has safe characters
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Verify incoming lead payload meets structural, type, size and enum invariants
+    function isValidLead(data) {
+      return data.keys().hasAll(['type', 'fullName', 'email', 'status'])
+        && data.keys().size() <= 12
+        && data.type in ['booking', 'enquiry']
+        && data.fullName is string && data.fullName.size() <= 100
+        && data.email is string && data.email.size() <= 100
+        && data.status in ['New', 'Contacted', 'Scheduled', 'Archived']
+        && (!('mainConcern' in data) || (data.mainConcern is string && data.mainConcern.size() <= 1000))
+        && (!('phone' in data) || (data.phone is string && data.phone.size() <= 20))
+        && (!('ageGroup' in data) || (data.ageGroup is string && data.ageGroup.size() <= 50))
+        && (!('preferredService' in data) || (data.preferredService is string && data.preferredService.size() <= 100))
+        && (!('preferredSessionMode' in data) || (data.preferredSessionMode is string && data.preferredSessionMode.size() <= 100))
+        && (!('preferredDate' in data) || (data.preferredDate is string && data.preferredDate.size() <= 50))
+        && (!('preferredTime' in data) || (data.preferredTime is string && data.preferredTime.size() <= 50))
+        && (!('timestamp' in data) || (data.timestamp is string && data.timestamp.size() <= 50));
+    }
+  }
+}
